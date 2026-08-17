@@ -1,0 +1,76 @@
+{
+  "templates": [
+    {
+      "id": "fx_procedencia_simplificado",
+      "nome": "PROCEDÊNCIA SIMPLIFICADO (BPC-LOAS deficiência, adulto)",
+      "quando_usar": "Adulto pleiteando BPC-LOAS por deficiência, quando o laudo médico pericial aponta incapacidade parcial e temporária (não permanente), mas há histórico de tratamento de longa data que permite reconhecer, por analogia à Súmula 48 da TNU, o impedimento de longo prazo. Uso preferencial quando o quadro NÃO é de deficiência intelectual/retardo mental (para isso, ver modelo 'retardo mental').",
+      "arquivo": "01_PROCEDENCIA_SIMPLIFICADO.docx",
+      "mapeamento": "mapeamentos/procedencia_simplificado.json",
+      "desfecho": "procedente",
+      "campos_obrigatorios": ["diagnostico_citacao", "incapacidade_tipo", "prazo_recuperacao", "valor_atrasados", "cpf", "dib", "dip", "cidade_pagamento"]
+    },
+    {
+      "id": "fx_procedencia_simplificado_crianca",
+      "nome": "PROCEDÊNCIA SIMPLIFICADO (BPC-LOAS deficiência, criança/adolescente < 16 anos)",
+      "quando_usar": "Criança ou adolescente menor de 16 anos pleiteando BPC-LOAS por deficiência (ex.: TDAH, TEA, cardiopatia e condições similares que não sejam deficiência intelectual/retardo mental), com laudo médico pericial favorável e estudo social demonstrando vulnerabilidade.",
+      "arquivo": "02_PROCEDENCIA_SIMPLIFICADO_CRIANCA.docx",
+      "mapeamento": "mapeamentos/procedencia_simplificado_crianca.json",
+      "desfecho": "procedente",
+      "campos_obrigatorios": ["diagnostico_crianca", "valor_atrasados", "cpf", "dib", "dip", "cidade_pagamento"]
+    },
+    {
+      "id": "fx_procedencia_crianca_retardo_mental",
+      "nome": "PROCEDÊNCIA SIMPLIFICADO (BPC-LOAS, criança/adolescente, deficiência intelectual/retardo mental)",
+      "quando_usar": "Criança ou adolescente com diagnóstico de deficiência intelectual/retardo mental (qualquer grau), pleiteando BPC-LOAS. Este modelo dispensa perícia médica judicial, bastando o diagnóstico já constante dos autos e o estudo social favorável.",
+      "arquivo": "08_PROCEDENCIA_CRIANCA_RETARDO_MENTAL.docx",
+      "mapeamento": "mapeamentos/procedencia_crianca_retardo_mental.json",
+      "desfecho": "procedente",
+      "campos_obrigatorios": ["diagnostico_deficiencia_intelectual", "valor_atrasados", "cpf", "dib", "dip", "cidade_pagamento"]
+    },
+    {
+      "id": "fx_procedencia_adulto_retardo_mental",
+      "nome": "PROCEDÊNCIA SIMPLIFICADO (BPC-LOAS, adulto, deficiência intelectual/retardo mental)",
+      "quando_usar": "Adulto com diagnóstico de deficiência intelectual/retardo mental (qualquer grau), pleiteando BPC-LOAS. Este modelo dispensa perícia médica judicial, bastando o diagnóstico já constante dos autos e o estudo social favorável.",
+      "arquivo": "09_PROCEDENCIA_ADULTO_RETARDO_MENTAL.docx",
+      "mapeamento": "mapeamentos/procedencia_adulto_retardo_mental.json",
+      "desfecho": "procedente",
+      "campos_obrigatorios": ["diagnostico_deficiencia_intelectual", "valor_atrasados", "cpf", "dib", "dip", "cidade_pagamento"]
+    },
+    {
+      "id": "fx_improcedencia_sem_impedimento_com_laudo_antigo",
+      "nome": "IMPROCEDÊNCIA SIMPLIFICADO (BPC-LOAS, sem impedimento de longo prazo, com laudo médico anterior nos autos)",
+      "quando_usar": "BPC-LOAS por deficiência, quando o laudo pericial judicial aponta impedimento apenas temporário (com prazo de recuperação definido, ex.: 6 meses) e há também um laudo médico particular mais antigo juntado à inicial, mas ainda assim não se caracteriza os 2 anos mínimos de impedimento de longo prazo.",
+      "arquivo": "03_IMPROCEDENCIA_SEM_IMPEDIMENTO.docx",
+      "mapeamento": "mapeamentos/improcedencia_sem_impedimento_com_laudo_antigo.json",
+      "desfecho": "improcedente",
+      "campos_obrigatorios": ["laudo_data", "diagnostico_citacao", "prazo_meses", "laudo_antigo_data"]
+    },
+    {
+      "id": "fx_improcedencia_sem_impedimento",
+      "nome": "IMPROCEDÊNCIA SIMPLIFICADO (BPC-LOAS, sem impedimento de longo prazo)",
+      "quando_usar": "BPC-LOAS por deficiência, quando o laudo pericial judicial aponta impedimento apenas temporário (com prazo de recuperação definido, ex.: 6 meses), sem laudo médico anterior relevante nos autos, não se caracterizando os 2 anos mínimos de impedimento de longo prazo.",
+      "arquivo": "06_IMPROCEDENCIA_SEM_IMPEDIMENTO_3.docx",
+      "mapeamento": "mapeamentos/improcedencia_sem_impedimento.json",
+      "desfecho": "improcedente",
+      "campos_obrigatorios": ["laudo_data", "diagnostico_citacao", "prazo_meses"]
+    },
+    {
+      "id": "fx_bpc_laudo_medico_desfavoravel",
+      "nome": "IMPROCEDÊNCIA GENÉRICA (BPC-LOAS, laudo pericial totalmente desfavorável)",
+      "quando_usar": "BPC-LOAS por deficiência, quando a perícia judicial (biopsicossocial) é categórica e não deixa dúvida: não há impedimento de longo prazo nem incapacidade, e o laudo é claro e sem contradições, dispensando fundamentação mais detalhada. Modelo fixo, sem campos a preencher (apenas a data, inserida automaticamente na assinatura eletrônica).",
+      "arquivo": "04_BPC_LAUDO_MEDICO_DESFAVORAVEL.docx",
+      "mapeamento": null,
+      "desfecho": "improcedente",
+      "campos_obrigatorios": []
+    },
+    {
+      "id": "fx_improcedente_bi_laudo_desfavoravel",
+      "nome": "IMPROCEDÊNCIA GENÉRICA (Auxílio-doença/Aposentadoria por invalidez, laudo pericial totalmente desfavorável)",
+      "quando_usar": "Auxílio-doença ou aposentadoria por invalidez, quando a perícia judicial é categórica ao afirmar que a parte autora NÃO está incapacitada para o trabalho, sem contradições que justifiquem nova perícia. Modelo fixo, sem campos a preencher (apenas a data, inserida automaticamente na assinatura eletrônica).",
+      "arquivo": "07_IMPROCEDENTE_BI_LAUDO_DESFAVORAVEL.docx",
+      "mapeamento": null,
+      "desfecho": "improcedente",
+      "campos_obrigatorios": []
+    }
+  ]
+}

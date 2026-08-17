@@ -1,0 +1,6 @@
+[
+  {"local": {"tipo": "paragrafo", "indice": 9}, "chunk": 0, "campo": "laudo_data"},
+  {"local": {"tipo": "paragrafo", "indice": 9}, "chunk": 1, "campo": "diagnostico_citacao"},
+  {"local": {"tipo": "paragrafo", "indice": 9}, "chunk": 2, "campo": "prazo_meses"},
+  {"local": {"tipo": "paragrafo", "indice": 10}, "chunk": 0, "campo": "laudo_antigo_data"}
+]

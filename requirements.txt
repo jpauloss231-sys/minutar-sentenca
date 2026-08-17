@@ -1,0 +1,5 @@
+streamlit
+python-docx
+jinja2
+pdfplumber
+google-generativeai

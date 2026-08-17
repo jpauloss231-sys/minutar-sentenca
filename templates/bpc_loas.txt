@@ -1,0 +1,50 @@
+Dispensado o relatório, com fundamento no art. 38 da Lei n° 9.099/95 c/c art. 1° da Lei n° 10.259/01.
+
+Objeto: concessão de benefício assistencial (amparo social) para pessoa {{ "idosa" if categoria == "idoso" else "com deficiência" }} – LOAS.
+
+Requisitos legais (art. 20 da Lei 8.742/93): nos termos do art. 20 da Lei n. 8.742/1993, o legislador definiu como beneficiários de amparo assistencial o idoso com 65 (sessenta e cinco) anos, bem como a pessoa com deficiência, a qual possui impedimento de longo prazo de natureza física, mental, intelectual ou sensorial, a obstruir sua participação plena e efetiva na sociedade em igualdade de condições com as demais pessoas, considerando-se impedimento de longo prazo o interregno mínimo de 2 (dois) anos. Quanto ao requisito da miserabilidade, o art. 20, § 3º, da Lei nº 8.742/1993, estabelece que se considera incapaz de prover a manutenção da pessoa com deficiência ou idosa a família cuja renda mensal per capita seja inferior a 1/4 (um quarto) do salário-mínimo, critério mitigado pela jurisprudência do STF (RE 567.985, RE 580.963 e Rcl 4.374) e pela TNU.
+
+Parte autora: {{ idade }} anos; {{ profissao_ocupacao }}.
+
+Indeferimento administrativo: DER em {{ der_extenso }} – {{ motivo_indeferimento }}.
+
+Avaliação pericial: {{ doenca_texto }}, apresentando incapacidade {{ incapacidade_tipo }}. Em resposta ao quesito 6, o(a) perito(a) esclarece que: "{{ resposta_quesito6 }}"
+
+{{ fundamentacao_deficiencia_texto }}
+
+{{ renda_familiar_texto }}
+
+{% if desfecho == "procedente" -%}
+O termo inicial do benefício deve ser a data do requerimento administrativo, porquanto já preenchidos os requisitos hábeis à concessão do benefício no aludido termo.
+
+Ante o exposto, ACOLHO o pedido inicial (art. 487, I, do CPC), julgando o feito com resolução de mérito, para condenar o INSS a implantar em favor da parte autora o Benefício Assistencial do art. 203, inciso V, da Constituição Federal de 1988, com DIB em {{ dib }}, DIP em {{ dip }}, RMI de {{ rmi }}, apurando-se os valores atrasados no montante de {{ valor_atrasados }} ({{ valor_atrasados_extenso }}).
+
+Sobre os valores atrasados incidirão correção monetária e juros de mora na forma da legislação aplicável (Tema 810 do STF, Tema 905 do STJ e art. 3º da EC 113/2021, conforme o período).
+
+{{ tutela_texto }}
+
+Sem custas ou honorários advocatícios. Defiro os benefícios da gratuidade judiciária à parte autora.
+
+Requisite-se o pagamento, inclusive quanto ao ressarcimento dos honorários periciais (art. 12, § 1º, da Lei nº 10.259/01).
+
+Antes de finalizado o prazo de duração do benefício, deverá a parte autora agendar nova perícia diretamente com o INSS, caso pretenda pleitear a prorrogação do benefício.
+
+Após o trânsito em julgado, e cumpridas as providências necessárias, arquivem-se.
+
+Publique-se. Registre-se.
+{%- else -%}
+Dessa forma, a improcedência do pleito é medida que se impõe.
+
+Pelo exposto, rejeito o pedido formulado na inicial, julgando o feito com resolução de mérito (art. 487, I, do CPC).
+
+Sem custas ou honorários advocatícios, nos termos do disposto no art. 55 da Lei nº 9.099/95.
+
+Com o trânsito em julgado, ao arquivo com as formalidades de estilo.
+
+Registre-se. Intimem-se.
+{%- endif %}
+
+Rio Branco (AC), {{ data_extenso }}.
+
+{{ juiz_nome }}
+{{ juiz_cargo }}

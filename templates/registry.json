@@ -1,0 +1,35 @@
+{
+  "templates": [
+    {
+      "id": "auxilio_doenca_invalidez",
+      "nome": "Auxílio-doença / Aposentadoria por Invalidez",
+      "quando_usar": "Ações previdenciárias em que se pleiteia auxílio-doença ou, subsidiariamente, aposentadoria por invalidez (segurado empregado, contribuinte individual, especial etc.), com base em perícia médica judicial que avalia incapacidade laborativa.",
+      "arquivo": "auxilio_doenca_invalidez.txt",
+      "campos_obrigatorios": [
+        "idade", "profissao", "data_pericia_extenso", "diagnostico",
+        "resposta_quesito6", "resultado_incapacidade", "qualidade_segurado_texto",
+        "avaliacao_texto", "desfecho", "data_extenso", "juiz_nome", "juiz_cargo"
+      ],
+      "campos_opcionais_se_procedente": [
+        "especie_beneficio", "dib", "dip", "rmi", "valor_atrasados",
+        "valor_atrasados_extenso", "tutela_texto"
+      ]
+    },
+    {
+      "id": "bpc_loas",
+      "nome": "Benefício Assistencial (BPC/LOAS) - idoso ou pessoa com deficiência",
+      "quando_usar": "Ações em que se pleiteia amparo social/benefício assistencial de prestação continuada para idoso (65 anos ou mais) ou pessoa com deficiência, com discussão sobre impedimento de longo prazo e miserabilidade (renda per capita).",
+      "arquivo": "bpc_loas.txt",
+      "campos_obrigatorios": [
+        "idade", "profissao_ocupacao", "der_extenso", "motivo_indeferimento",
+        "resposta_quesito6", "doenca_texto", "incapacidade_tipo",
+        "fundamentacao_deficiencia_texto", "renda_familiar_texto", "desfecho",
+        "data_extenso", "juiz_nome", "juiz_cargo"
+      ],
+      "campos_opcionais_se_procedente": [
+        "dib", "dip", "rmi", "valor_atrasados", "valor_atrasados_extenso",
+        "tutela_texto", "prazo_multa_dias", "valor_multa"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+Dispensado o relatório, com fundamento no art. 38 da Lei n° 9.099/95 c/c art. 1° da Lei n° 10.259/01.
+
+Objeto: concessão de auxílio-doença ou, subsidiariamente, aposentadoria por invalidez.
+
+Requisitos da aposentadoria por invalidez e do auxílio-doença (arts. 42 e 59 da Lei 8.213/91): a) qualidade de segurado; b) carência; c) incapacidade para o trabalho e atividades habituais, por mais de quinze dias, no caso de auxílio-doença, ou incapacidade total e permanente, no caso de aposentadoria por invalidez.
+
+Parte autora: {{ idade }} anos; {{ profissao }}.
+
+Perícia judicial: realizada em {{ data_pericia_extenso }}, indica que a parte autora apresenta {{ diagnostico }}. Em resposta ao quesito 6, o(a) perito(a) esclarece que: "{{ resposta_quesito6 }}"
+
+{{ qualidade_segurado_texto }}
+
+{{ avaliacao_texto }}
+
+{% if desfecho == "improcedente" -%}
+Dessa forma, a improcedência do pleito é medida que se impõe.
+
+Pelo exposto, rejeito o pedido formulado na inicial, julgando o feito com resolução de mérito (art. 487, I, do CPC).
+
+Sem custas ou honorários advocatícios, nos termos do disposto no art. 55 da Lei nº 9.099/95.
+
+Com o trânsito em julgado, ao arquivo com as formalidades de estilo.
+
+Registre-se. Intimem-se.
+{%- elif desfecho == "procedente" -%}
+Ante o exposto, ACOLHO o pedido inicial (art. 487, I, do CPC), julgando o feito com resolução de mérito, para condenar o INSS a implantar em favor da parte autora o benefício de {{ especie_beneficio }}, com DIB em {{ dib }}, DIP em {{ dip }}, RMI de {{ rmi }}, apurando-se os valores atrasados no montante de {{ valor_atrasados }} ({{ valor_atrasados_extenso }}).
+
+Sobre os valores atrasados incidirão correção monetária e juros de mora na forma da legislação aplicável (Tema 810 do STF, Tema 905 do STJ e art. 3º da EC 113/2021, conforme o período).
+
+{{ tutela_texto }}
+
+Sem custas ou honorários advocatícios. Defiro os benefícios da gratuidade judiciária à parte autora.
+
+Requisite-se o pagamento, inclusive quanto ao ressarcimento dos honorários periciais (art. 12, § 1º, da Lei nº 10.259/01).
+
+Após o trânsito em julgado, e cumpridas as providências necessárias, arquivem-se.
+
+Publique-se. Registre-se. Intimem-se.
+{%- else -%}
+Ante o exposto, julgo PARCIALMENTE PROCEDENTE o pedido (art. 487, I, do CPC), nos seguintes termos: {{ avaliacao_texto }}
+
+Sem custas ou honorários advocatícios. Defiro os benefícios da gratuidade judiciária à parte autora, se requerida.
+
+Após o trânsito em julgado, e cumpridas as providências necessárias, arquivem-se.
+
+Publique-se. Registre-se. Intimem-se.
+{%- endif %}
+
+Rio Branco (AC), {{ data_extenso }}.
+
+{{ juiz_nome }}
+{{ juiz_cargo }}

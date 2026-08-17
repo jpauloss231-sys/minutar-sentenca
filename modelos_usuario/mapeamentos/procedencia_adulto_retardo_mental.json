@@ -1,0 +1,8 @@
+[
+  {"local": {"tipo": "paragrafo", "indice": 6}, "chunk": 0, "campo": "diagnostico_deficiencia_intelectual"},
+  {"local": {"tipo": "paragrafo", "indice": 15}, "chunk": 0, "campo": "valor_atrasados"},
+  {"local": {"tipo": "tabela", "tabela": 0, "linha": 2, "coluna": 1, "paragrafo": 0}, "chunk": 0, "campo": "cpf"},
+  {"local": {"tipo": "tabela", "tabela": 0, "linha": 3, "coluna": 1, "paragrafo": 0}, "chunk": 0, "campo": "dib"},
+  {"local": {"tipo": "tabela", "tabela": 0, "linha": 4, "coluna": 1, "paragrafo": 0}, "chunk": 0, "campo": "dip"},
+  {"local": {"tipo": "tabela", "tabela": 0, "linha": 5, "coluna": 1, "paragrafo": 0}, "chunk": 0, "campo": "cidade_pagamento"}
+]
