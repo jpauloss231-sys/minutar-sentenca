@@ -3,12 +3,12 @@
 Minutar Sentença em Lote — versão com leitura automática por IA (Google Gemini, camada gratuita).
 
 Fluxo:
-1) Login simples com senha (definida em .streamlit/secrets.toml).
-2) Upload de PDF(s) do processo.
-3) O texto é extraído e enviado ao Gemini, que devolve: se o processo já está
+1) Login simples com senha (definida em .streamlit/secrets.toml / Secrets do Streamlit Cloud).
+2) Upload de VÁRIOS PDFs de processos de uma vez.
+3) Cada PDF é lido e enviado ao Gemini, que devolve: se o processo já está
    pronto para sentença, qual modelo se aplica, e os campos já preenchidos.
-4) Você REVISA os campos sugeridos pela IA (edição livre) antes de gerar.
-5) Gera o .docx (modelo oficial com destaque amarelo, ou modelo flexível).
+4) Você REVISA os campos sugeridos pela IA (edição livre) de cada processo antes de gerar.
+5) Gera o .docx (modelo oficial com destaque amarelo, ou modelo flexível) para cada processo.
 
 IMPORTANTE: a IA pode errar. Sempre revise a minuta antes de assinar.
 """
@@ -117,7 +117,7 @@ Regras:
    equivalente (ex.: modelos que dispensam perícia médica em casos de deficiência intelectual
    evidente). Se NÃO estiver pronto (ex.: só há contestação, sem perícia), marque
    pronto_para_sentenca=false e explique o motivo em motivo_se_nao_pronto.
-2. Se estiver pronto, escolha o modelo mais adequado no catálogo abaixo. Day preferência
+2. Se estiver pronto, escolha o modelo mais adequado no catálogo abaixo. Dê preferência
    SEMPRE aos modelos fixos (tipo_template='fixo') quando o caso se encaixar; só use um
    modelo flexível (tipo_template='flexivel') se nenhum modelo fixo servir bem ao caso.
 3. Preencha CADA campo exigido pelo modelo escolhido, com base nos fatos do processo:
@@ -169,86 +169,154 @@ def carregar_registry_fixos():
         return {t["id"]: t for t in json.load(f)["templates"]}
 
 
+def gerar_docx_bytes(analise: dict, valores: dict, id_caso: str) -> bytes:
+    tipo = analise.get("tipo_template")
+    tpl_id = analise.get("template_id")
+    tmp_out = BASE_DIR / f"_tmp_{id_caso}.docx"
+    try:
+        if tipo == "fixo":
+            registry = carregar_registry_fixos()
+            tpl = registry[tpl_id]
+            template_path = MODELOS_DIR / tpl["arquivo"]
+            if tpl["mapeamento"] is None:
+                tmp_out.write_bytes(template_path.read_bytes())
+            else:
+                with open(MODELOS_DIR / tpl["mapeamento"], encoding="utf-8") as f:
+                    mapeamento = json.load(f)
+                preencher(str(template_path), mapeamento, valores, str(tmp_out), manter_destaque=True)
+        else:
+            texto_final = render_text(tpl_id, valores)
+            text_to_docx(texto_final, tmp_out)
+        return tmp_out.read_bytes()
+    finally:
+        tmp_out.unlink(missing_ok=True)
+
+
 # ---------------------------------------------------------------------------
 # ESTADO DA SESSÃO
 # ---------------------------------------------------------------------------
 if "minutas_geradas" not in st.session_state:
     st.session_state["minutas_geradas"] = {}
-if "analise_atual" not in st.session_state:
-    st.session_state["analise_atual"] = None
+if "analises" not in st.session_state:
+    # dict: chave = nome do arquivo -> {"resultado": {...} ou None, "erro": str ou None}
+    st.session_state["analises"] = {}
 
 st.title("⚖️ Minutar Sentença em Lote — leitura automática por IA")
-st.caption("A IA (Google Gemini) lê o PDF, decide o modelo e sugere os campos. "
-           "Você revisa e confirma antes de gerar o .docx. Sempre confira antes de assinar.")
+st.caption("A IA (Google Gemini) lê cada PDF, decide o modelo e sugere os campos. "
+           "Você revisa e confirma antes de gerar cada .docx. Sempre confira antes de assinar.")
 
-st.header("1) Envie o PDF do processo")
-arquivo = st.file_uploader("PDF do processo", type=["pdf"])
+st.header("1) Envie os PDFs dos processos (pode subir vários de uma vez)")
+arquivos = st.file_uploader(
+    "PDFs dos processos", type=["pdf"], accept_multiple_files=True,
+    help="Selecione vários arquivos de uma vez (segure Ctrl ou Shift ao escolher os PDFs)."
+)
 
-if arquivo and st.button("🔎 Ler e analisar com IA", type="primary"):
-    with st.spinner("Extraindo texto do PDF..."):
-        texto = extrair_texto_pdf(arquivo)
-    with st.spinner("Analisando com a IA (pode levar até 1 minuto para PDFs grandes)..."):
+col_a, col_b = st.columns([1, 3])
+with col_a:
+    processar = st.button("🔎 Ler e analisar todos com IA", type="primary", disabled=not arquivos)
+with col_b:
+    if arquivos:
+        st.caption(f"{len(arquivos)} arquivo(s) selecionado(s).")
+
+if processar:
+    novos = [a for a in arquivos if a.name not in st.session_state["analises"]]
+    if not novos:
+        st.info("Todos os arquivos selecionados já foram analisados nesta sessão. "
+                 "Role a página para revisar os resultados abaixo.")
+    barra = st.progress(0.0, text="Iniciando...")
+    for i, arquivo in enumerate(novos, start=1):
+        barra.progress((i - 1) / max(len(novos), 1), text=f"Processando {arquivo.name} ({i}/{len(novos)})...")
         try:
+            texto = extrair_texto_pdf(arquivo)
             resultado = chamar_gemini(texto)
-            st.session_state["analise_atual"] = resultado
+            st.session_state["analises"][arquivo.name] = {"resultado": resultado, "erro": None}
         except Exception as e:
-            st.error(f"Erro ao consultar a IA: {e}")
-            st.session_state["analise_atual"] = None
+            st.session_state["analises"][arquivo.name] = {"resultado": None, "erro": str(e)}
+        barra.progress(i / max(len(novos), 1), text=f"Processando {arquivo.name} ({i}/{len(novos)})...")
+    barra.empty()
+    st.rerun()
 
-analise = st.session_state["analise_atual"]
+# ---------------------------------------------------------------------------
+# 2) RESULTADOS — um bloco expansível por processo
+# ---------------------------------------------------------------------------
+if st.session_state["analises"]:
+    st.header("2) Resultados da análise — revise cada processo antes de gerar")
 
-if analise:
-    st.header("2) Resultado da análise")
-    st.info(analise.get("resumo_caso", ""))
+    for nome_arquivo, item in st.session_state["analises"].items():
+        erro = item.get("erro")
+        analise = item.get("resultado")
 
-    if not analise.get("pronto_para_sentenca"):
-        st.warning(f"⚠️ A IA avaliou que este processo NÃO está pronto para sentença.\n\n"
-                   f"Motivo: {analise.get('motivo_se_nao_pronto', '(não informado)')}")
-    else:
-        tipo = analise.get("tipo_template")
-        tpl_id = analise.get("template_id")
-        st.success(f"Modelo sugerido: **{tpl_id}** ({'oficial/fixo' if tipo == 'fixo' else 'flexível'})")
+        with st.expander(f"📄 {nome_arquivo}", expanded=(erro is not None or analise is not None)):
+            if erro:
+                st.error(f"Erro ao consultar a IA: {erro}")
+                continue
 
-        st.header("3) Revise os campos antes de gerar")
-        st.caption("Edite qualquer campo que a IA tenha errado ou deixado incompleto.")
+            if analise is None:
+                st.info("Ainda não analisado.")
+                continue
 
-        valores_editados = {}
-        for item in analise.get("campos", []):
-            valores_editados[item["campo"]] = st.text_area(
-                item["campo"], value=item.get("valor", ""), height=70
+            st.info(analise.get("resumo_caso", ""))
+
+            if not analise.get("pronto_para_sentenca"):
+                st.warning(
+                    f"⚠️ A IA avaliou que este processo NÃO está pronto para sentença.\n\n"
+                    f"Motivo: {analise.get('motivo_se_nao_pronto', '(não informado)')}"
+                )
+                continue
+
+            tipo = analise.get("tipo_template")
+            tpl_id = analise.get("template_id")
+            st.success(f"Modelo sugerido: **{tpl_id}** ({'oficial/fixo' if tipo == 'fixo' else 'flexível'})")
+
+            st.caption("Edite qualquer campo que a IA tenha errado ou deixado incompleto.")
+            chave_base = nome_arquivo.replace(" ", "_")
+            valores_editados = {}
+            for item_campo in analise.get("campos", []):
+                campo_nome = item_campo["campo"]
+                valores_editados[campo_nome] = st.text_area(
+                    campo_nome,
+                    value=item_campo.get("valor", ""),
+                    height=70,
+                    key=f"campo_{chave_base}_{campo_nome}",
+                )
+
+            id_caso_padrao = Path(nome_arquivo).stem
+            id_caso = st.text_input(
+                "Identificador do caso (nº do processo / nome do autor)",
+                value=id_caso_padrao,
+                key=f"id_caso_{chave_base}",
             )
 
-        id_caso = st.text_input("Identificador do caso (nº do processo / nome do autor)", "")
+            if st.button("✅ Gerar minuta deste processo", type="primary", key=f"gerar_{chave_base}"):
+                if not id_caso:
+                    st.error("Informe um identificador para o caso.")
+                else:
+                    try:
+                        conteudo = gerar_docx_bytes(analise, valores_editados, id_caso)
+                        st.session_state["minutas_geradas"][f"{id_caso}.docx"] = conteudo
+                        st.success(f"Minuta gerada: {id_caso}.docx — veja na seção 3 abaixo.")
+                    except Exception as e:
+                        st.error(f"Erro ao gerar a minuta: {e}")
 
-        if st.button("✅ Gerar minuta", type="primary"):
-            if not id_caso:
-                st.error("Informe um identificador para o caso.")
-            else:
-                try:
-                    if tipo == "fixo":
-                        registry = carregar_registry_fixos()
-                        tpl = registry[tpl_id]
-                        template_path = MODELOS_DIR / tpl["arquivo"]
-                        tmp_out = BASE_DIR / f"_tmp_{id_caso}.docx"
-                        if tpl["mapeamento"] is None:
-                            tmp_out.write_bytes(template_path.read_bytes())
-                        else:
-                            with open(MODELOS_DIR / tpl["mapeamento"], encoding="utf-8") as f:
-                                mapeamento = json.load(f)
-                            preencher(str(template_path), mapeamento, valores_editados, str(tmp_out),
-                                      manter_destaque=True)
-                    else:
-                        texto_final = render_text(tpl_id, valores_editados)
-                        tmp_out = BASE_DIR / f"_tmp_{id_caso}.docx"
-                        text_to_docx(texto_final, tmp_out)
+    prontos = [
+        nome for nome, item in st.session_state["analises"].items()
+        if item.get("resultado") and item["resultado"].get("pronto_para_sentenca")
+        and f"{Path(nome).stem}.docx" not in st.session_state["minutas_geradas"]
+    ]
+    if len(prontos) > 1:
+        st.info(
+            f"{len(prontos)} processo(s) prontos ainda não geraram minuta. "
+            "Gere um por um acima (o identificador de cada um pode ser ajustado antes de gerar)."
+        )
 
-                    st.session_state["minutas_geradas"][f"{id_caso}.docx"] = tmp_out.read_bytes()
-                    tmp_out.unlink(missing_ok=True)
-                    st.success(f"Minuta gerada: {id_caso}.docx — veja na seção 4 abaixo.")
-                except Exception as e:
-                    st.error(f"Erro ao gerar a minuta: {e}")
+    if st.button("🗑️ Limpar análises desta sessão"):
+        st.session_state["analises"] = {}
+        st.rerun()
 
-st.header("4) Minutas geradas nesta sessão")
+# ---------------------------------------------------------------------------
+# 3) MINUTAS GERADAS
+# ---------------------------------------------------------------------------
+st.header("3) Minutas geradas nesta sessão")
 geradas = st.session_state["minutas_geradas"]
 if not geradas:
     st.info("Nenhuma minuta gerada ainda.")
