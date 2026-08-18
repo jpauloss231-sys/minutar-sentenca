@@ -6,13 +6,27 @@
       "quando_usar": "Ações previdenciárias em que se pleiteia auxílio-doença ou, subsidiariamente, aposentadoria por invalidez (segurado empregado, contribuinte individual, especial etc.), com base em perícia médica judicial que avalia incapacidade laborativa.",
       "arquivo": "auxilio_doenca_invalidez.txt",
       "campos_obrigatorios": [
-        "idade", "profissao", "data_pericia_extenso", "diagnostico",
-        "resposta_quesito6", "resultado_incapacidade", "qualidade_segurado_texto",
-        "avaliacao_texto", "desfecho", "data_extenso", "juiz_nome", "juiz_cargo"
+        "idade",
+        "profissao",
+        "data_pericia_extenso",
+        "diagnostico",
+        "resposta_quesito6",
+        "resultado_incapacidade",
+        "qualidade_segurado_texto",
+        "avaliacao_texto",
+        "desfecho",
+        "data_extenso",
+        "juiz_nome",
+        "juiz_cargo"
       ],
       "campos_opcionais_se_procedente": [
-        "especie_beneficio", "dib", "dip", "rmi", "valor_atrasados",
-        "valor_atrasados_extenso", "tutela_texto"
+        "especie_beneficio",
+        "dib",
+        "dip",
+        "rmi",
+        "valor_atrasados",
+        "valor_atrasados_extenso",
+        "tutela_texto"
       ]
     },
     {
@@ -21,14 +35,47 @@
       "quando_usar": "Ações em que se pleiteia amparo social/benefício assistencial de prestação continuada para idoso (65 anos ou mais) ou pessoa com deficiência, com discussão sobre impedimento de longo prazo e miserabilidade (renda per capita).",
       "arquivo": "bpc_loas.txt",
       "campos_obrigatorios": [
-        "idade", "profissao_ocupacao", "der_extenso", "motivo_indeferimento",
-        "resposta_quesito6", "doenca_texto", "incapacidade_tipo",
-        "fundamentacao_deficiencia_texto", "renda_familiar_texto", "desfecho",
-        "data_extenso", "juiz_nome", "juiz_cargo"
+        "idade",
+        "profissao_ocupacao",
+        "der_extenso",
+        "motivo_indeferimento",
+        "resposta_quesito6",
+        "doenca_texto",
+        "incapacidade_tipo",
+        "fundamentacao_deficiencia_texto",
+        "renda_familiar_texto",
+        "desfecho",
+        "data_extenso",
+        "juiz_nome",
+        "juiz_cargo"
       ],
       "campos_opcionais_se_procedente": [
-        "dib", "dip", "rmi", "valor_atrasados", "valor_atrasados_extenso",
-        "tutela_texto", "prazo_multa_dias", "valor_multa"
+        "dib",
+        "dip",
+        "rmi",
+        "valor_atrasados",
+        "valor_atrasados_extenso",
+        "tutela_texto",
+        "prazo_multa_dias",
+        "valor_multa"
+      ]
+    },
+    {
+      "id": "salario_maternidade",
+      "nome": "Salário-maternidade (segurada especial rural) - procedente ou extinção por falta de prova",
+      "quando_usar": "Ações em que se pleiteia salário-maternidade na condição de segurada especial rural, quando NENHUM dos modelos fixos de salário-maternidade se encaixar exatamente (ex.: quando não há exatamente 2 documentos centrais de prova material, como no modelo fixo 'fx_salmat_procedencia_simplificado', ou quando há mais nuances na fundamentação). Cobre dois desfechos: 'procedente' (comprovada a atividade rural/qualidade de segurada especial, dispensada carência por força da ADI 2111 do STF) e 'extinto_sem_merito' (ausência de início de prova material da atividade rural, nos termos do Tema 629 do STJ e Tema 1124 do STJ). Se houver preliminar de prescrição a afastar (fundamentando pela suspensão do prazo entre o requerimento administrativo e a comunicação de indeferimento), preencha 'preliminar_prescricao_texto'; caso contrário deixe em branco.",
+      "arquivo": "salario_maternidade.txt",
+      "campos_obrigatorios": [
+        "fundamentacao_texto",
+        "desfecho",
+        "data_extenso",
+        "juiz_nome",
+        "juiz_cargo"
+      ],
+      "campos_opcionais_se_procedente": [
+        "nascimento_data",
+        "valor_atrasados",
+        "preliminar_prescricao_texto"
       ]
     }
   ]
