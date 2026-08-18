@@ -137,23 +137,44 @@ CATÁLOGO DE MODELOS DISPONÍVEIS:
 Responda SOMENTE no formato JSON estruturado solicitado.
 """
 
-MODEL_NAME = "gemini-2.5-flash"
+# Lista de modelos a tentar, em ordem de preferência. O Google descontinua nomes de
+# modelo de tempos em tempos; se o primeiro não existir mais (erro 404), o app tenta
+# o próximo da lista automaticamente — assim não é preciso editar o código toda vez.
+MODELOS_CANDIDATOS = [
+    "gemini-3.6-flash",
+    "gemini-flash-latest",
+    "gemini-2.5-flash",
+    "gemini-2.0-flash",
+    "gemini-1.5-flash",
+]
 
 
 def chamar_gemini(texto_processo: str) -> dict:
-    model = genai.GenerativeModel(
-        MODEL_NAME,
-        system_instruction=PROMPT_SISTEMA,
-        generation_config={
-            "response_mime_type": "application/json",
-            "response_schema": RESPONSE_SCHEMA,
-            "temperature": 0.1,
-        },
-    )
-    resposta = model.generate_content(
-        f"Texto extraído do processo (pode conter páginas fora de ordem ou ruído de OCR):\n\n{texto_processo}"
-    )
-    return json.loads(resposta.text)
+    ultimo_erro = None
+    for nome_modelo in MODELOS_CANDIDATOS:
+        try:
+            model = genai.GenerativeModel(
+                nome_modelo,
+                system_instruction=PROMPT_SISTEMA,
+                generation_config={
+                    "response_mime_type": "application/json",
+                    "response_schema": RESPONSE_SCHEMA,
+                    "temperature": 0.1,
+                },
+            )
+            resposta = model.generate_content(
+                f"Texto extraído do processo (pode conter páginas fora de ordem ou ruído de OCR):\n\n{texto_processo}"
+            )
+            return json.loads(resposta.text)
+        except Exception as e:
+            msg = str(e)
+            ultimo_erro = e
+            # Erro 404 = esse nome de modelo não existe mais -> tenta o próximo da lista.
+            # Qualquer outro erro (ex.: cota excedida, chave inválida) -> não adianta trocar
+            # de modelo, então já interrompe e mostra o erro real.
+            if "404" not in msg:
+                raise
+    raise ultimo_erro
 
 
 def extrair_texto_pdf(arquivo) -> str:
