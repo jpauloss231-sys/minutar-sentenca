@@ -1,0 +1,44 @@
+Dispensado o relatório nos termos do art. 38 da Lei nº 9.099/1995 c/c o art. 1º da Lei nº 10.259/2001.
+
+Busca a parte autora a concessão do benefício de salário-maternidade, na condição de segurada especial{% if nascimento_data %}, decorrente do nascimento de filho(a) ocorrido em {{ nascimento_data }}{% endif %}.
+
+{% if preliminar_prescricao_texto -%}
+{{ preliminar_prescricao_texto }}
+
+{% endif -%}
+{{ fundamentacao_texto }}
+
+{% if desfecho == "procedente" -%}
+Posto isso, JULGO PROCEDENTE O PEDIDO, resolvendo o mérito (art. 487, I, do CPC), para condenar o INSS a conceder à parte autora o benefício de salário-maternidade relativo ao nascimento de filho(a), ocorrido em {{ nascimento_data }}, devendo pagar as parcelas atrasadas corrigidas monetariamente e acrescidas de juros de mora calculados desde a citação, até o efetivo cumprimento do julgado, no valor de {{ valor_atrasados }}.
+
+Os juros e a correção monetária serão aplicados de acordo com o Manual de Cálculos da Justiça Federal vigente.
+
+Isento de custas e honorários advocatícios em primeiro grau, na forma do art. 54 c/c 55 da Lei 9.099/95.
+
+Defiro o pedido de assistência judiciária gratuita, tendo em vista estarem preenchidos os requisitos da Lei 1.060/50.
+
+Sentença publicada e registrada eletronicamente.
+
+Intimem-se.
+
+Após o trânsito em julgado, arquivem-se os autos com baixa na distribuição e anotações de estilo.
+{%- else -%}
+A ausência de conteúdo probatório eficaz a instruir a inicial, conforme determina o art. 283 do CPC, implica a carência de pressuposto de constituição e desenvolvimento válido do processo, impondo sua extinção sem o julgamento do mérito (art. 267, IV, do CPC) e a consequente possibilidade de a parte autora intentar novamente a ação (art. 268 do CPC), caso reúna os elementos necessários a tal iniciativa.
+
+Posto isso, extingo o processo sem resolução do mérito, conforme art. 267, IV, do CPC, ressaltando que não poderá ser proposta nova demanda sem que seja suprida a irregularidade apontada — ausência de início de prova material da qualidade de segurada especial —, além de ser imprescindível submeter a documentação à apreciação do INSS por meio de novo requerimento administrativo (Tema 1124 do STJ).
+
+Isento de custas e honorários advocatícios em primeiro grau, na forma do art. 54 c/c 55 da Lei 9.099/95.
+
+Defiro o pedido de assistência judiciária gratuita, tendo em vista estarem preenchidos os requisitos da Lei 1.060/50.
+
+Sentença publicada e registrada automaticamente.
+
+Intimem-se.
+
+Após o trânsito em julgado, arquivem-se os autos com baixa na distribuição e anotações de estilo.
+{%- endif %}
+
+Rio Branco (AC), {{ data_extenso }}.
+
+{{ juiz_nome }}
+{{ juiz_cargo }}
