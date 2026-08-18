@@ -137,7 +137,7 @@ CATÁLOGO DE MODELOS DISPONÍVEIS:
 Responda SOMENTE no formato JSON estruturado solicitado.
 """
 
-MODEL_NAME = "gemini-flash-latest"
+MODEL_NAME = "gemini-2.5-flash"
 
 
 def chamar_gemini(texto_processo: str) -> dict:
