@@ -319,3 +319,52 @@ if st.session_state["analises"]:
                 value=id_caso_padrao,
                 key=f"id_caso_{chave_base}",
             )
+ 
+            if st.button("✅ Gerar minuta deste processo", type="primary", key=f"gerar_{chave_base}"):
+                if not id_caso:
+                    st.error("Informe um identificador para o caso.")
+                else:
+                    try:
+                        conteudo = gerar_docx_bytes(analise, valores_editados, id_caso)
+                        st.session_state["minutas_geradas"][f"{id_caso}.docx"] = conteudo
+                        st.success(f"Minuta gerada: {id_caso}.docx — veja na seção 3 abaixo.")
+                    except Exception as e:
+                        st.error(f"Erro ao gerar a minuta: {e}")
+ 
+    prontos = [
+        nome for nome, item in st.session_state["analises"].items()
+        if item.get("resultado") and item["resultado"].get("pronto_para_sentenca")
+        and f"{Path(nome).stem}.docx" not in st.session_state["minutas_geradas"]
+    ]
+    if len(prontos) > 1:
+        st.info(
+            f"{len(prontos)} processo(s) prontos ainda não geraram minuta. "
+            "Gere um por um acima (o identificador de cada um pode ser ajustado antes de gerar)."
+        )
+ 
+    if st.button("🗑️ Limpar análises desta sessão"):
+        st.session_state["analises"] = {}
+        st.rerun()
+ 
+# ---------------------------------------------------------------------------
+# 3) MINUTAS GERADAS
+# ---------------------------------------------------------------------------
+st.header("3) Minutas geradas nesta sessão")
+geradas = st.session_state["minutas_geradas"]
+if not geradas:
+    st.info("Nenhuma minuta gerada ainda.")
+else:
+    for nome, conteudo in geradas.items():
+        col1, col2 = st.columns([4, 1])
+        col1.write(f"📄 {nome}")
+        col2.download_button("Baixar", conteudo, file_name=nome,
+                              mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                              key=f"dl_{nome}")
+    zip_buf = io.BytesIO()
+    with zipfile.ZipFile(zip_buf, "w", zipfile.ZIP_DEFLATED) as zf:
+        for nome, conteudo in geradas.items():
+            zf.writestr(nome, conteudo)
+    st.download_button("⬇️ Baixar todas em .zip", zip_buf.getvalue(), file_name="minutas.zip", mime="application/zip")
+    if st.button("Limpar minutas geradas"):
+        st.session_state["minutas_geradas"] = {}
+        st.rerun()
