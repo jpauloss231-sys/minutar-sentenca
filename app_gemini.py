@@ -342,10 +342,11 @@ def chamar_groq(texto_processo: str) -> dict:
             msg = str(e)
             ultimo_erro = e
             # 404 = modelo não existe/foi descontinuado; 429 = cota da Groq esgotada
-            # (pouco provável, mas possível em uso intenso) — tenta o próximo modelo.
+            # (pouco provável, mas possível em uso intenso); 413 = texto grande
+            # demais para o limite por minuto do modelo — tenta o próximo modelo.
             # Qualquer outro erro interrompe e sobe para quem chamou (chamar_ia),
             # que decide se cai para o Gemini.
-            if "404" not in msg and "429" not in msg:
+            if "404" not in msg and "429" not in msg and "413" not in msg:
                 raise
     raise ultimo_erro
 
@@ -380,11 +381,24 @@ def chamar_gemini(texto_processo: str) -> dict:
     raise ultimo_erro
 
 
+# A Groq tem limite de 8.000 tokens por minuto (TPM) no plano gratuito para os
+# modelos usados aqui. Processos muito extraídos (PDFs longos/escaneados) podem
+# facilmente ultrapassar isso. Como regra prática, ~1 token equivale a ~3
+# caracteres em português (considerando o prompt do sistema, que já é grande).
+# Se o texto do processo + o prompt do sistema ultrapassar essa estimativa,
+# pulamos a Groq direto e vamos para o Gemini, que aceita documentos muito
+# maiores (evita perder tempo com uma tentativa que já sabemos que vai falhar).
+LIMITE_CARACTERES_GROQ = 18000
+
+
 def chamar_ia(texto_processo: str) -> dict:
-    """Tenta a Groq primeiro (tier gratuito bem maior); se não estiver configurada
-    ou falhar por completo, cai automaticamente para o Gemini como reserva."""
+    """Tenta a Groq primeiro (tier gratuito bem maior); se não estiver configurada,
+    se o processo for grande demais para o limite por minuto da Groq, ou se falhar
+    por completo, cai automaticamente para o Gemini como reserva (aceita documentos
+    bem maiores)."""
     erro_groq = None
-    if groq_client is not None:
+    processo_pequeno_o_bastante = len(texto_processo) <= LIMITE_CARACTERES_GROQ
+    if groq_client is not None and processo_pequeno_o_bastante:
         try:
             return chamar_groq(texto_processo)
         except Exception as e:
@@ -466,7 +480,7 @@ with st.sidebar:
     if groq_client is not None:
         st.success("IA principal: **Groq** (gpt-oss-120b)")
     if GEMINI_API_KEY:
-        st.caption("Reserva automática: Gemini")
+        st.caption("Reserva automática: Gemini (também usado direto para processos grandes)")
     if groq_client is None and GEMINI_API_KEY:
         st.warning("IA principal: **Gemini** (Groq não configurada)")
 
