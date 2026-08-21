@@ -3,68 +3,47 @@
     {
       "id": "fx_procedencia_simplificado",
       "nome": "PROCEDÊNCIA SIMPLIFICADO (BPC-LOAS deficiência, adulto)",
-      "quando_usar": "Adulto pleiteando BPC-LOAS por deficiência, quando o laudo médico pericial aponta incapacidade parcial e temporária (não permanente), mas há histórico de tratamento de longa data que permite reconhecer, por analogia à Súmula 48 da TNU, o impedimento de longo prazo. Uso preferencial quando o quadro NÃO é de deficiência intelectual/retardo mental (para isso, ver modelo 'retardo mental').",
+      "quando_usar": "Adulto pleiteando BPC-LOAS por deficiência, quando o laudo médico pericial aponta impedimento de longo prazo (não necessariamente incapacidade laborativa), com apoio na Súmula 48 da TNU e/ou histórico de tratamento de longa data. Uso preferencial quando o quadro NÃO é de deficiência intelectual/retardo mental (para isso, ver modelo 'retardo mental'). O campo 'diagnostico_citacao' deve trazer o(s) diagnóstico(s)/CID(s) entre aspas, exatamente como no laudo, seguido de vírgula (ex.: '\"diabetes mellitus tipo 2 (CID E11)\",'). O campo 'fundamentacao_vulnerabilidade_texto' deve seguir a REGRA GERAL DE AFERIÇÃO DA HIPOSSUFICIÊNCIA descrita no prompt do sistema, com base no laudo/estudo social real do processo. O campo 'valor_atrasados' substitui o trecho 'no montante de XXXX.' inteiro — preencha no formato 'no montante de R$ X.XXX,XX.' ou, se não houver cálculo pronto, 'no montante a ser apurado em liquidação/cálculo judicial (RPV).'.",
       "arquivo": "01_PROCEDENCIA_SIMPLIFICADO.docx",
       "mapeamento": "mapeamentos/procedencia_simplificado.json",
       "desfecho": "procedente",
-      "campos_obrigatorios": [
-        "diagnostico_citacao",
-        "incapacidade_tipo",
-        "prazo_recuperacao",
-        "valor_atrasados",
-        "cpf",
-        "dib",
-        "dip",
-        "cidade_pagamento"
-      ]
+      "campos_obrigatorios": ["diagnostico_citacao", "fundamentacao_vulnerabilidade_texto", "valor_atrasados", "cpf", "dib", "dip", "cidade_pagamento"]
     },
     {
       "id": "fx_procedencia_simplificado_crianca",
       "nome": "PROCEDÊNCIA SIMPLIFICADO (BPC-LOAS deficiência, criança/adolescente < 16 anos)",
-      "quando_usar": "Criança ou adolescente menor de 16 anos pleiteando BPC-LOAS por deficiência (ex.: TDAH, TEA, cardiopatia e condições similares que não sejam deficiência intelectual/retardo mental), com laudo médico pericial favorável e estudo social demonstrando vulnerabilidade.",
+      "quando_usar": "Criança ou adolescente menor de 16 anos pleiteando BPC-LOAS por deficiência (ex.: TDAH, TEA, cardiopatia e condições similares que não sejam deficiência intelectual/retardo mental), com laudo médico pericial favorável. O campo 'diagnostico_crianca' deve trazer o diagnóstico de forma resumida (ex.: 'TDAH e cardiopatia congênita'). O campo 'fundamentacao_vulnerabilidade_texto' deve seguir a REGRA GERAL DE AFERIÇÃO DA HIPOSSUFICIÊNCIA descrita no prompt do sistema, com base no laudo/estudo social real do processo. O campo 'valor_atrasados' substitui o trecho 'no montante de XXXX.' inteiro — preencha no formato 'no montante de R$ X.XXX,XX.' ou, se não houver cálculo pronto, 'no montante a ser apurado em liquidação/cálculo judicial (RPV).'.",
       "arquivo": "02_PROCEDENCIA_SIMPLIFICADO_CRIANCA.docx",
       "mapeamento": "mapeamentos/procedencia_simplificado_crianca.json",
       "desfecho": "procedente",
-      "campos_obrigatorios": [
-        "diagnostico_crianca",
-        "valor_atrasados",
-        "cpf",
-        "dib",
-        "dip",
-        "cidade_pagamento"
-      ]
+      "campos_obrigatorios": ["diagnostico_crianca", "fundamentacao_vulnerabilidade_texto", "valor_atrasados", "cpf", "dib", "dip", "cidade_pagamento"]
     },
     {
       "id": "fx_procedencia_crianca_retardo_mental",
       "nome": "PROCEDÊNCIA SIMPLIFICADO (BPC-LOAS, criança/adolescente, deficiência intelectual/retardo mental)",
-      "quando_usar": "Criança ou adolescente com diagnóstico de deficiência intelectual/retardo mental (qualquer grau), pleiteando BPC-LOAS. Este modelo dispensa perícia médica judicial, bastando o diagnóstico já constante dos autos e o estudo social favorável.",
+      "quando_usar": "Criança ou adolescente com diagnóstico de deficiência intelectual/retardo mental (qualquer grau), pleiteando BPC-LOAS. Este modelo dispensa perícia médica judicial, bastando o diagnóstico já constante dos autos. O campo 'diagnostico_deficiencia_intelectual' deve trazer o grau (ex.: 'deficiência intelectual leve'). O campo 'fundamentacao_vulnerabilidade_texto' deve seguir a REGRA GERAL DE AFERIÇÃO DA HIPOSSUFICIÊNCIA descrita no prompt do sistema, com base no laudo/estudo social real do processo. O campo 'valor_atrasados' substitui o trecho 'no montante de XXXX.' inteiro — preencha no formato 'no montante de R$ X.XXX,XX.' ou, se não houver cálculo pronto, 'no montante a ser apurado em liquidação/cálculo judicial (RPV).'.",
       "arquivo": "08_PROCEDENCIA_CRIANCA_RETARDO_MENTAL.docx",
       "mapeamento": "mapeamentos/procedencia_crianca_retardo_mental.json",
       "desfecho": "procedente",
-      "campos_obrigatorios": [
-        "diagnostico_deficiencia_intelectual",
-        "valor_atrasados",
-        "cpf",
-        "dib",
-        "dip",
-        "cidade_pagamento"
-      ]
+      "campos_obrigatorios": ["diagnostico_deficiencia_intelectual", "fundamentacao_vulnerabilidade_texto", "valor_atrasados", "cpf", "dib", "dip", "cidade_pagamento"]
     },
     {
       "id": "fx_procedencia_adulto_retardo_mental",
       "nome": "PROCEDÊNCIA SIMPLIFICADO (BPC-LOAS, adulto, deficiência intelectual/retardo mental)",
-      "quando_usar": "Adulto com diagnóstico de deficiência intelectual/retardo mental (qualquer grau), pleiteando BPC-LOAS. Este modelo dispensa perícia médica judicial, bastando o diagnóstico já constante dos autos e o estudo social favorável.",
+      "quando_usar": "Adulto com diagnóstico de deficiência intelectual/retardo mental (qualquer grau), pleiteando BPC-LOAS. Este modelo dispensa perícia médica judicial, bastando o diagnóstico já constante dos autos. O campo 'diagnostico_deficiencia_intelectual' deve trazer o grau (ex.: 'deficiência intelectual leve'). O campo 'fundamentacao_vulnerabilidade_texto' deve seguir a REGRA GERAL DE AFERIÇÃO DA HIPOSSUFICIÊNCIA descrita no prompt do sistema, com base no laudo/estudo social real do processo. O campo 'valor_atrasados' substitui o trecho 'no montante de XXXX.' inteiro — preencha no formato 'no montante de R$ X.XXX,XX.' ou, se não houver cálculo pronto, 'no montante a ser apurado em liquidação/cálculo judicial (RPV).'.",
       "arquivo": "09_PROCEDENCIA_ADULTO_RETARDO_MENTAL.docx",
       "mapeamento": "mapeamentos/procedencia_adulto_retardo_mental.json",
       "desfecho": "procedente",
-      "campos_obrigatorios": [
-        "diagnostico_deficiencia_intelectual",
-        "valor_atrasados",
-        "cpf",
-        "dib",
-        "dip",
-        "cidade_pagamento"
-      ]
+      "campos_obrigatorios": ["diagnostico_deficiencia_intelectual", "fundamentacao_vulnerabilidade_texto", "valor_atrasados", "cpf", "dib", "dip", "cidade_pagamento"]
+    },
+    {
+      "id": "fx_loas_idoso_procedencia_simplificado",
+      "nome": "PROCEDÊNCIA SIMPLIFICADO (BPC-LOAS, idoso)",
+      "quando_usar": "Pessoa idosa (65 anos ou mais na data do requerimento administrativo) pleiteando BPC-LOAS. Não exige diagnóstico médico/perícia — apenas idade e miserabilidade. O campo 'fundamentacao_vulnerabilidade_texto' deve seguir a REGRA GERAL DE AFERIÇÃO DA HIPOSSUFICIÊNCIA descrita no prompt do sistema, com base no laudo/estudo social real do processo. O campo 'valor_atrasados' substitui apenas o trecho ' XXXX' (com espaço antes, sem a palavra 'montante') ao final da frase 'pagar a título de atrasados (parcelas vencidas) o montante de' — preencha no formato ' R$ X.XXX,XX' ou, se não houver cálculo pronto, ' valor a ser apurado em liquidação/cálculo judicial (RPV)'.",
+      "arquivo": "12_LOAS_IDOSO_PROCEDENCIA_SIMPLIFICADO.docx",
+      "mapeamento": "mapeamentos/loas_idoso_procedencia_simplificado.json",
+      "desfecho": "procedente",
+      "campos_obrigatorios": ["fundamentacao_vulnerabilidade_texto", "valor_atrasados", "cpf", "dib", "dip", "cidade_pagamento"]
     },
     {
       "id": "fx_improcedencia_sem_impedimento_com_laudo_antigo",
@@ -73,12 +52,7 @@
       "arquivo": "03_IMPROCEDENCIA_SEM_IMPEDIMENTO.docx",
       "mapeamento": "mapeamentos/improcedencia_sem_impedimento_com_laudo_antigo.json",
       "desfecho": "improcedente",
-      "campos_obrigatorios": [
-        "laudo_data",
-        "diagnostico_citacao",
-        "prazo_meses",
-        "laudo_antigo_data"
-      ]
+      "campos_obrigatorios": ["laudo_data", "diagnostico_citacao", "prazo_meses", "laudo_antigo_data"]
     },
     {
       "id": "fx_improcedencia_sem_impedimento",
@@ -87,11 +61,7 @@
       "arquivo": "06_IMPROCEDENCIA_SEM_IMPEDIMENTO_3.docx",
       "mapeamento": "mapeamentos/improcedencia_sem_impedimento.json",
       "desfecho": "improcedente",
-      "campos_obrigatorios": [
-        "laudo_data",
-        "diagnostico_citacao",
-        "prazo_meses"
-      ]
+      "campos_obrigatorios": ["laudo_data", "diagnostico_citacao", "prazo_meses"]
     },
     {
       "id": "fx_bpc_laudo_medico_desfavoravel",
@@ -118,13 +88,7 @@
       "arquivo": "11_SALMAT_PROCEDENCIA_SIMPLIFICADO.docx",
       "mapeamento": "mapeamentos/salmat_procedente_simplificado.json",
       "desfecho": "procedente",
-      "campos_obrigatorios": [
-        "filho_nome_data_par7",
-        "documento_prova_1",
-        "documento_prova_2",
-        "filho_nome_data_par14",
-        "valor_atrasados"
-      ]
+      "campos_obrigatorios": ["filho_nome_data_par7", "documento_prova_1", "documento_prova_2", "filho_nome_data_par14", "valor_atrasados"]
     }
   ]
 }
