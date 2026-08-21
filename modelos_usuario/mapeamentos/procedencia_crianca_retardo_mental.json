@@ -1,6 +1,7 @@
 [
-  {"local": {"tipo": "paragrafo", "indice": 9}, "chunk": 0, "campo": "diagnostico_deficiencia_intelectual"},
-  {"local": {"tipo": "paragrafo", "indice": 18}, "chunk": 0, "campo": "valor_atrasados"},
+  {"local": {"tipo": "paragrafo", "indice": 8}, "chunk": 0, "campo": "diagnostico_deficiencia_intelectual"},
+  {"local": {"tipo": "paragrafo", "indice": 9}, "chunk": 0, "campo": "fundamentacao_vulnerabilidade_texto"},
+  {"local": {"tipo": "paragrafo", "indice": 17}, "chunk": 0, "campo": "valor_atrasados"},
   {"local": {"tipo": "tabela", "tabela": 0, "linha": 2, "coluna": 1, "paragrafo": 0}, "chunk": 0, "campo": "cpf"},
   {"local": {"tipo": "tabela", "tabela": 0, "linha": 3, "coluna": 1, "paragrafo": 0}, "chunk": 0, "campo": "dib"},
   {"local": {"tipo": "tabela", "tabela": 0, "linha": 4, "coluna": 1, "paragrafo": 0}, "chunk": 0, "campo": "dip"},
