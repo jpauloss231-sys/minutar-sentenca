@@ -390,6 +390,29 @@ def chamar_gemini(texto_processo: str) -> dict:
 # maiores (evita perder tempo com uma tentativa que já sabemos que vai falhar).
 LIMITE_CARACTERES_GROQ = 18000
 
+# O Gemini gratuito também tem um teto de tokens de ENTRADA por minuto (250.000,
+# no plano gratuito). Processos muito grandes (PDFs escaneados/longos, 15-20 MB+)
+# podem ultrapassar isso mesmo no Gemini. Cortamos o texto num tamanho seguro
+# antes de mandar para qualquer uma das IAs, e avisamos o usuário quando isso
+# acontece, para que ele saiba que a análise pode estar incompleta e precisa
+# revisar manualmente as partes finais do processo.
+LIMITE_CARACTERES_TOTAL = 550000
+
+
+def truncar_texto_processo(texto: str) -> tuple[str, bool]:
+    """Corta o texto extraído do PDF num tamanho seguro para as IAs configuradas.
+    Retorna (texto_cortado, foi_cortado)."""
+    if len(texto) <= LIMITE_CARACTERES_TOTAL:
+        return texto, False
+    cortado = texto[:LIMITE_CARACTERES_TOTAL]
+    cortado += (
+        "\n\n[AVISO: o restante do processo foi cortado por ser grande demais "
+        "para o limite das IAs disponíveis no momento. Esta análise pode estar "
+        "incompleta — confira manualmente as partes finais do processo antes de "
+        "confiar nesta sugestão.]"
+    )
+    return cortado, True
+
 
 def chamar_ia(texto_processo: str) -> dict:
     """Tenta a Groq primeiro (tier gratuito bem maior); se não estiver configurada,
@@ -521,10 +544,13 @@ if processar:
         barra.progress((i - 1) / max(len(novos), 1), text=f"Processando {arquivo.name} ({i}/{len(novos)})...")
         try:
             texto = extrair_texto_pdf(arquivo)
+            texto, foi_cortado = truncar_texto_processo(texto)
             resultado = chamar_ia(texto)
-            st.session_state["analises"][arquivo.name] = {"resultado": resultado, "erro": None}
+            st.session_state["analises"][arquivo.name] = {
+                "resultado": resultado, "erro": None, "cortado": foi_cortado,
+            }
         except Exception as e:
-            st.session_state["analises"][arquivo.name] = {"resultado": None, "erro": str(e)}
+            st.session_state["analises"][arquivo.name] = {"resultado": None, "erro": str(e), "cortado": False}
         barra.progress(i / max(len(novos), 1), text=f"Processando {arquivo.name} ({i}/{len(novos)})...")
     barra.empty()
     st.rerun()
@@ -540,6 +566,13 @@ if st.session_state["analises"]:
         analise = item.get("resultado")
 
         with st.expander(f"📄 {nome_arquivo}", expanded=(erro is not None or analise is not None)):
+            if item.get("cortado"):
+                st.warning(
+                    "⚠️ Este processo é muito grande e o texto foi cortado antes de "
+                    "ir para a IA (limite técnico das IAs disponíveis). A análise "
+                    "abaixo pode estar incompleta — revise manualmente as partes "
+                    "finais do processo antes de confiar nesta sugestão."
+                )
             if erro:
                 st.error(f"Erro ao consultar a IA: {erro}")
                 continue
