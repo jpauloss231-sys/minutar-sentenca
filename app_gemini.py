@@ -252,6 +252,33 @@ Regras:
 5. Seja extremamente cauteloso: esta é uma minuta de rascunho que será revisada por um humano
    antes de qualquer assinatura. Prefira sinalizar dúvida a arriscar um dado errado.
 
+REGRA GERAL DE AFERIÇÃO DA HIPOSSUFICIÊNCIA (campo 'fundamentacao_vulnerabilidade_texto',
+usado nos modelos de BPC-LOAS por deficiência e idoso): NUNCA copie um texto genérico de
+vulnerabilidade sem checar os dados reais do estudo social/socioeconômico do processo. Para
+escrever esse campo, siga este raciocínio:
+a) Calcule a renda familiar per capita relatada no estudo social, EXCLUINDO do somatório: (i)
+   valores recebidos a título de Bolsa Família (ou programa de transferência de renda
+   equivalente) e (ii) benefício previdenciário ou assistencial no valor de até 1 (um) salário
+   mínimo recebido por outro membro da família (art. 20, §14, da Lei nº 8.742/1993).
+b) Se, após essas exclusões, a renda per capita resultante for INFERIOR a 1/2 (meio) salário
+   mínimo: está preenchido o requisito da hipossuficiência/miserabilidade. Nesse caso, pode
+   usar como base o texto padrão já existente no modelo (adaptando aos dados concretos do
+   processo — ex.: mencionar os elementos do laudo social que embasam a conclusão), afirmando
+   que a vulnerabilidade socioeconômica está comprovada.
+c) Se a renda per capita resultante (já com as exclusões) for IGUAL OU SUPERIOR a 1/2 salário
+   mínimo: NÃO presuma vulnerabilidade automaticamente. Analise as demais circunstâncias
+   fáticas relatadas no estudo social/laudo socioeconômico — condições de moradia, registros
+   fotográficos da residência, bens que guarnecem a casa, existência de gastos excepcionais
+   (ex.: medicamentos, tratamentos de saúde, fraldas, transporte para tratamento) — e conclua,
+   de forma fundamentada e específica ao caso, se essas circunstâncias, ainda assim,
+   caracterizam a miserabilidade exigida (flexibilização do critério puramente objetivo de
+   renda, admitida pela jurisprudência), OU se a situação não caracteriza vulnerabilidade
+   suficiente para a concessão do benefício. Se a prova dos autos for insuficiente para essa
+   conclusão em qualquer sentido, sinalize isso explicitamente no texto (não decida no vácuo).
+d) Em qualquer caso, cite no texto os elementos concretos do estudo social que embasam a
+   conclusão (não apenas o critério de renda) — é isso que torna o campo específico ao processo
+   e não um texto genérico.
+
 CATÁLOGO DE MODELOS DISPONÍVEIS:
 {CATALOGO_MODELOS}
 
