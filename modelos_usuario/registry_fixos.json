@@ -1,4 +1,4 @@
-{ 
+{
   "templates": [
     {
       "id": "fx_procedencia_simplificado",
@@ -46,9 +46,18 @@
       "campos_obrigatorios": ["fundamentacao_vulnerabilidade_texto", "valor_atrasados", "cpf", "dib", "dip", "cidade_pagamento"]
     },
     {
+      "id": "fx_procedencia_soma_laudos_antigos",
+      "nome": "PROCEDÊNCIA SIMPLIFICADO (BPC-LOAS deficiência, soma do prazo do perito com laudo(s) antigo(s) atinge 2 anos)",
+      "quando_usar": "BPC-LOAS por deficiência, quando o laudo pericial judicial aponta prazo de recuperação INFERIOR a 2 (dois) anos, MAS há nos autos laudo(s) médico(s) mais antigo(s) juntados com a inicial que já relatavam, em ano(s) anterior(es), o MESMO quadro clínico incapacitante — de modo que, somando o período já decorrido desde esse(s) laudo(s) antigo(s) até a data prevista para a cessação indicada pelo perito, o impedimento de longo prazo ATINGE o mínimo de 2 (dois) anos exigido pela Súmula 48/TNU e pelo Tema 173/TNU. Se, mesmo somando os períodos, NÃO se atingir os 2 anos, use o modelo de improcedência 'fx_improcedencia_sem_impedimento_com_laudo_antigo' em vez deste. O campo 'diagnostico_citacao' deve trazer o(s) diagnóstico(s)/CID(s) entre aspas, exatamente como no laudo pericial, seguido de vírgula. O campo 'prazo_meses' deve trazer apenas o número e a unidade indicados pelo perito para a recuperação (ex.: '6 meses'). O campo 'anos_laudos_antigos' deve trazer o(s) ano(s) do(s) laudo(s) médico(s) mais antigo(s) juntados à inicial que descrevem o mesmo quadro clínico (ex.: '2021' ou '2021 e 2022'). O campo 'fundamentacao_vulnerabilidade_texto' deve seguir a REGRA GERAL DE AFERIÇÃO DA HIPOSSUFICIÊNCIA descrita no prompt do sistema, com base no laudo/estudo social real do processo. O campo 'valor_atrasados' substitui o trecho 'no montante de XXXX.' inteiro — preencha no formato 'no montante de R$ X.XXX,XX.' ou, se não houver cálculo pronto, 'no montante a ser apurado em liquidação/cálculo judicial (RPV).'.",
+      "arquivo": "13_PROCEDENCIA_SOMA_LAUDOS_ANTIGOS.docx",
+      "mapeamento": "mapeamentos/procedencia_soma_laudos_antigos.json",
+      "desfecho": "procedente",
+      "campos_obrigatorios": ["laudo_data", "diagnostico_citacao", "prazo_meses", "anos_laudos_antigos", "fundamentacao_vulnerabilidade_texto", "valor_atrasados", "cpf", "dib", "dip", "cidade_pagamento"]
+    },
+    {
       "id": "fx_improcedencia_sem_impedimento_com_laudo_antigo",
       "nome": "IMPROCEDÊNCIA SIMPLIFICADO (BPC-LOAS, sem impedimento de longo prazo, com laudo médico anterior nos autos)",
-      "quando_usar": "BPC-LOAS por deficiência, quando o laudo pericial judicial aponta impedimento apenas temporário (com prazo de recuperação definido, ex.: 6 meses) e há também um laudo médico particular mais antigo juntado à inicial, mas ainda assim não se caracteriza os 2 anos mínimos de impedimento de longo prazo.",
+      "quando_usar": "BPC-LOAS por deficiência, quando o laudo pericial judicial aponta impedimento apenas temporário (com prazo de recuperação definido, ex.: 6 meses) e há também um laudo médico particular mais antigo juntado à inicial, mas MESMO SOMANDO esse período antigo ao prazo do perito, ainda assim não se caracterizam os 2 anos mínimos de impedimento de longo prazo. Se a soma dos períodos ATINGIR os 2 anos, use o modelo de procedência 'fx_procedencia_soma_laudos_antigos' em vez deste.",
       "arquivo": "03_IMPROCEDENCIA_SEM_IMPEDIMENTO.docx",
       "mapeamento": "mapeamentos/improcedencia_sem_impedimento_com_laudo_antigo.json",
       "desfecho": "improcedente",
